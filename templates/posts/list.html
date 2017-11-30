@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% block title %}Posts{% endblock %}
+{% block content %}
+  <div class="container">
+  <div class="row">
+    <ul class="col-md-8">
+      {% for obj in object_list %}
+        <li>
+          <p>{{ obj.title }}</p>
+          <small>by: {{ obj.user.email }} from: {{ obj.user.country }} {{ obj.user.city }}</small>
+          <img  class="img-fluid" src="{{ obj.image.url }}" alt="">
+          <p>{{ obj.text }}</p>
+        </li>
+          <div>
+            <i class="fa fa-comment" aria-hidden="true"></i> {{ obj.comments.all.count }}
+            <span send-to="{% url 'utils:post-like' pk=obj.pk %}" data-id="{{ object.id }}" data-action="like" style="padding:5px;cursor:pointer;">
+              <i class="fa fa-thumbs-up" aria-hidden="true"></i>
+              <span data-count="like">{{ obj.votes.likes.count }}</span>
+            </span>
+          </div>
+        <a class="btn btn-success" href="{% url 'posts:post-detail' pk=obj.pk %}">Detail</a>
+        <hr>
+      {% endfor %}
+    </ul>
+    <div class="col-md-4">
+      <a href="{% url 'posts:post-create' %}" class="btn btn-success">Create post</a>
+      <form action="" name='myform' method="get">
+        <p style="padding-top:15px;"><a href="{% url 'posts:post-list' %}" style="display:block;">All</a></p>
+        <input name="kw" type="text" title="" placeholder="by key word">
+        <input name="country" type="text" title="" placeholder="by user country">
+        <input name="city" type="text" title="" placeholder="by user city">
+
+
+        <button type="submit" class="btn btn-primary">Search</button>
+      </form>
+    </div>
+    {% if is_paginated %}
+    <ul class="pagination col-md-12">
+      {% if page_obj.has_previous %}
+        <li><a href="?page={{ page_obj.previous_page_number }}{{ getvars }}">&laquo;</a></li>
+      {% else %}
+        <li class="disabled"><span>&laquo;</span></li>
+      {% endif %}
+      {% for i in paginator.page_range %}
+        {% if page_obj.number == i %}
+          <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+        {% else %}
+          <li><a href="?page={{ i }}{{ getvars }}">{{ i }}</a></li>
+        {% endif %}
+      {% endfor %}
+      {% if page_obj.has_next %}
+        <li><a href="?page={{ page_obj.next_page_number }}{{ getvars }}">&raquo;</a></li>
+      {% else %}
+        <li class="disabled"><span>&raquo;</span></li>
+      {% endif %}
+    </ul>
+  {% endif %}
+  </div>
+
+
+  </div>
+{% endblock %}

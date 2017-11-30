@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" />
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+  <link rel="stylesheet" href="{% static '/css/main.css' %}">
+  <title>{% block title %} {% endblock %}</title>
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+      <a class="navbar-brand" href="{% url 'posts:post-list' %}">Posts</a>
+      {% if user.is_authenticated %}
+        <div>
+          <small>{{ request.user.email }}</small>
+          <a href="{% url 'accounts:logout' %}">Log Out</a>
+        </div>
+      {% else %}
+        <div class="">
+          <a href="{% url 'accounts:login' %}">Sign In</a>
+          <a href="{% url 'accounts:register' %}">Sign Up</a>
+        </div>
+      {% endif %}
+    </div>
+  </nav>
+  <main style="padding-bottom: 200px;">
+  <div class="container">
+  <div class="messages">
+    {% for msg in messages %}
+      {{ msg }}
+    {% endfor %}
+
+  </div>
+  </div>
+  {% block content %}
+
+  {% endblock %}
+  </main>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
+<script src="{% static 'js/main.js' %}"></script>
+</body>
+</html>
